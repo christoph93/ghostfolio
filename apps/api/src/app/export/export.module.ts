@@ -8,6 +8,7 @@ import { DataProviderModule } from '@ghostfolio/api/services/data-provider/data-
 
 import { Module } from '@nestjs/common';
 
+import { UserModule } from '../user/user.module';
 import { ExportController } from './export.controller';
 import { ExportService } from './export.service';
 
@@ -19,7 +20,8 @@ import { ExportService } from './export.service';
     DataGatheringModule,
     DataProviderModule,
     OrderModule,
-    RedisCacheModule
+    RedisCacheModule,
+    UserModule
   ],
   controllers: [ExportController],
   providers: [ExportService]

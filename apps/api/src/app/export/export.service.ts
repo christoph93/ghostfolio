@@ -1,5 +1,6 @@
 import { AccountService } from '@ghostfolio/api/app/account/account.service';
 import { OrderService } from '@ghostfolio/api/app/order/order.service';
+import { UserService } from '@ghostfolio/api/app/user/user.service';
 import { environment } from '@ghostfolio/api/environments/environment';
 import { Filter, Export } from '@ghostfolio/common/interfaces';
 
@@ -9,7 +10,8 @@ import { Injectable } from '@nestjs/common';
 export class ExportService {
   public constructor(
     private readonly accountService: AccountService,
-    private readonly orderService: OrderService
+    private readonly orderService: OrderService,
+    private readonly userService: UserService
   ) {}
 
   public async export({
@@ -60,6 +62,8 @@ export class ExportService {
       });
     }
 
+    const userWithSettings = await this.userService.user({ id: userId });
+
     return {
       meta: { date: new Date().toISOString(), version: environment.version },
       accounts,
@@ -95,7 +99,10 @@ export class ExportService {
                 : SymbolProfile.symbol
           };
         }
-      )
+      ),
+      user: {
+        settings: { currency: userWithSettings.Settings.settings.baseCurrency }
+      }
     };
   }
 }
